@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "tile_size": 16,
+  "width": 10,
+  "height": 8,
+
+  "legend": {
+    ".": { "blocked": false, "encounter": false, "color": [0.7, 0.7, 0.7] },
+    "#": { "blocked": true, "encounter": false, "color": [0.2, 0.2, 0.2] },
+    "g": { "blocked": false, "encounter": true, "color": [0.0, 1.0, 0.0] }
+  },
+
+  "rows": [
+    "##########",
+    "###....gg#",
+    "##......g#",
+    "#........#",
+    "#gg......#",
+    "#gggg...##",
+    "#gggg..###",
+    "##########"
+  ],
+
+  "objects": []
+}

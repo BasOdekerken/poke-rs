@@ -1,5 +1,16 @@
 use bevy::prelude::*;
 
+#[derive(Component)]
+pub struct OverworldCamera;
+
+#[derive(Component)]
+pub struct CameraTarget;
+
+#[derive(Resource)]
+pub struct CameraFollowSettings {
+    pub stiffness: f32,
+}
+
 #[derive(Component, Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Facing {
     North,

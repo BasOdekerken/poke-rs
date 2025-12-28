@@ -1,5 +1,5 @@
-use bevy::prelude::*;
 use crate::overworld::*;
+use bevy::prelude::*;
 
 pub fn tick_overworld_input_lock(
     time: Res<Time>,
@@ -11,7 +11,6 @@ pub fn tick_overworld_input_lock(
     };
 
     lock.timer.tick(time.delta());
-
     if lock.timer.just_finished() {
         commands.remove_resource::<OverworldInputLock>();
     }
@@ -35,7 +34,7 @@ pub fn update_move_tween(
         if tween.timer.just_finished() {
             transform.translation.x = tween.to.x;
             transform.translation.y = tween.to.y;
-            
+
             commands.entity(entity).remove::<MoveTween>();
             ev_step_finished.write(StepFinished { entity });
         }
