@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use super::{
     controller::overworld_controller_system, input::HeldDirs, tick_overworld_input_lock,
-    update_move_tween, StepFinished,
+    update_movement_state, StepFinished,
 };
 
 #[derive(SystemSet, Debug, Hash, PartialEq, Eq, Clone)]
@@ -18,7 +18,7 @@ impl Plugin for OverworldPlugin {
                 Update,
                 (
                     tick_overworld_input_lock,
-                    update_move_tween,
+                    update_movement_state,
                     overworld_controller_system,
                 )
                     .in_set(OverworldSet),

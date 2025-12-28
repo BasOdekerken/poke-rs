@@ -1,20 +1,23 @@
 use bevy::prelude::*;
-use super::{GridPos, MoveTween, TurnGrace, OverworldGridSettings};
+use super::{GridPos, MovementState, TurnGrace, OverworldGridSettings};
 
-pub fn snap_entity_to_grid(
+pub fn sync_transform_to_grid(
     settings: Option<Res<OverworldGridSettings>>,
     mut commands: Commands,
-    mut query: Query<(Entity, &GridPos, &mut Transform)>,
+    mut query: Query<(Entity, &GridPos, &mut Transform, Option<&mut MovementState>)>,
 ) {
     let Some(settings) = settings else {
         return;
     };
 
-    for (entity, grid, mut transform) in &mut query {
+    for (entity, grid, mut transform, move_state) in &mut query {
         transform.translation.x = grid.x as f32 * settings.tile_size;
         transform.translation.y = grid.y as f32 * settings.tile_size;
 
-        commands.entity(entity).remove::<MoveTween>();
+        if let Some(mut state) = move_state {
+            *state = MovementState::Idle;
+        }
+
         commands.entity(entity).remove::<TurnGrace>();
     }
 }

@@ -16,26 +16,29 @@ pub fn tick_overworld_input_lock(
     }
 }
 
-pub fn update_move_tween(
+pub fn update_movement_state(
     time: Res<Time>,
-    mut commands: Commands,
     mut ev_step_finished: MessageWriter<StepFinished>,
-    mut query: Query<(Entity, &mut MoveTween, &mut Transform)>,
+    mut query: Query<(Entity, &mut MovementState, &mut Transform)>,
 ) {
-    for (entity, mut tween, mut transform) in &mut query {
-        tween.timer.tick(time.delta());
+    for (entity, mut state, mut transform) in &mut query {
+        let MovementState::Moving { from, to, timer } = &mut *state else {
+            continue;
+        };
+        
+        timer.tick(time.delta());
 
-        let t = tween.timer.fraction();
-        let pos = tween.from.lerp(tween.to, t);
+        let t = timer.fraction();
+        let pos = from.lerp(*to, t);
 
         transform.translation.x = pos.x;
         transform.translation.y = pos.y;
 
-        if tween.timer.just_finished() {
-            transform.translation.x = tween.to.x;
-            transform.translation.y = tween.to.y;
+        if timer.just_finished() {
+            transform.translation.x = to.x;
+            transform.translation.y = to.y;
 
-            commands.entity(entity).remove::<MoveTween>();
+            *state = MovementState::Idle;
             ev_step_finished.write(StepFinished { entity });
         }
     }

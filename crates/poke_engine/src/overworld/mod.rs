@@ -4,7 +4,7 @@ pub mod controller;
 pub mod input;
 pub mod map;
 pub mod plugin;
-pub mod snap;
+pub mod grid_sync;
 pub mod systems;
 
 pub use camera::*;
@@ -13,5 +13,5 @@ pub use controller::*;
 pub use input::*;
 pub use map::*;
 pub use plugin::*;
-pub use snap::*;
+pub use grid_sync::*;
 pub use systems::*;

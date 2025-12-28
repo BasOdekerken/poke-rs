@@ -1,15 +1,6 @@
 use bevy::prelude::*;
 
-#[derive(Component)]
-pub struct OverworldCamera;
-
-#[derive(Component)]
-pub struct CameraTarget;
-
-#[derive(Resource)]
-pub struct CameraFollowSettings {
-    pub stiffness: f32,
-}
+use super::{OverworldCamera, CameraTarget, CameraFollowSettings};
 
 pub fn camera_follow(
     time: Res<Time>,

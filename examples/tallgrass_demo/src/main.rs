@@ -113,13 +113,13 @@ fn main() {
         )
         .add_systems(
             OnEnter(GameState::Battle),
-            (snap_entity_to_grid, battle_enter).chain(),
+            (sync_transform_to_grid, battle_enter).chain(),
         )
         .add_systems(Update, battle_input.run_if(in_state(GameState::Battle)))
         .add_systems(OnExit(GameState::Battle), battle_exit)
         .add_systems(
             OnEnter(GameState::Overworld),
-            (snap_entity_to_grid, overworld_enter_input_lock).chain(),
+            (sync_transform_to_grid, overworld_enter_input_lock).chain(),
         )
         .run();
 }
@@ -152,6 +152,7 @@ fn setup(mut commands: Commands) {
         Sprite::from_color(Color::srgb(1.0, 0.0, 0.0), Vec2::splat(tile_size)),
         Transform::from_xyz(2.0 * tile_size, 2.0 * tile_size, 10.0),
         Facing::South,
+        MovementState::Idle,
         Player,
         CameraTarget,
         OverworldPlayerController,

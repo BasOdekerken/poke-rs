@@ -26,10 +26,13 @@ pub struct GridPos {
 }
 
 #[derive(Component)]
-pub struct MoveTween {
-    pub from: Vec2,
-    pub to: Vec2,
-    pub timer: Timer,
+pub enum MovementState {
+    Idle,
+    Moving {
+        from: Vec2,
+        to: Vec2,
+        timer: Timer,
+    },
 }
 
 #[derive(Component, Clone)]

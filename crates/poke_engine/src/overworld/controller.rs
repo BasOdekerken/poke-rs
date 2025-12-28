@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use super::{
     facing_delta, facing_pressed,
     input::{update_held_dirs, HeldDirs},
-    Facing, GridPos, MoveTween, OverworldGridSettings, OverworldInputLock, OverworldMap,
+    Facing, GridPos, MovementState, OverworldGridSettings, OverworldInputLock, OverworldMap,
     OverworldMovementSettings, TurnGrace,
 };
 
@@ -25,9 +25,10 @@ pub fn overworld_controller_system(
             &mut GridPos,
             &mut Facing,
             &Transform,
+            &mut MovementState,
             Option<&mut TurnGrace>,
         ),
-        (With<OverworldPlayerController>, Without<MoveTween>),
+        With<OverworldPlayerController>
     >,
 ) {
     if lock.is_some() {
@@ -40,9 +41,13 @@ pub fn overworld_controller_system(
         return;
     };
 
-    let Ok((entity, mut pos, mut facing, transform, turn_grace)) = query.single_mut() else {
+    let Ok((entity, mut pos, mut facing, transform, mut move_state, turn_grace)) = query.single_mut() else {
         return;
     };
+
+    if !matches!(*move_state, MovementState::Idle) {
+        return;
+    }
 
     // Turn grace handling prevent immediate move when tapping a new direction
     if let Some(mut turn_grace) = turn_grace {
@@ -89,9 +94,9 @@ pub fn overworld_controller_system(
         next_y as f32 * grid.tile_size,
     );
 
-    commands.entity(entity).insert(MoveTween {
+    *move_state = MovementState::Moving {
         from,
         to,
         timer: Timer::from_seconds(movement.step_time, TimerMode::Once),
-    });
+    };
 }
